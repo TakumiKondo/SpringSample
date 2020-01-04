@@ -17,8 +17,10 @@ public class EmployeeService {
         Employee employee = new Employee();
         employee.setId((Integer) map.get("id"));
         employee.setName((String) map.get("name"));
-        employee.setAge((Integer) map.get("age"));
+        employee.setAge(new Age((Integer)map.get("age")));
 
         return employee;
     }
+
+
 }

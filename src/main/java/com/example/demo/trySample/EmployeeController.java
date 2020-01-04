@@ -17,7 +17,7 @@ public class EmployeeController {
         Employee emp = employeeService.findOne(id);
         model.addAttribute("id", emp.getId());
         model.addAttribute("name", emp.getName());
-        model.addAttribute("age", emp.getAge());
+        model.addAttribute("age", emp.age());
 
         return "employee";
     }

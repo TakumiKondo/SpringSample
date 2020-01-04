@@ -12,10 +12,10 @@ public class EmployeeRepository {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	public Map<String, Object> findOne(int id){
+	public Map<String, Object> findOne(int id) {
 		String sql;
 		sql = "SELECT *"
-				+ "FROM employee"
+				+ "FROM employee "
 				+ "WHERE id = ?";
 
 		Map<String, Object> employee = jdbcTemplate.queryForMap(sql, id);
