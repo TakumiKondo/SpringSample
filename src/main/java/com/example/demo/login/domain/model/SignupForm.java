@@ -12,31 +12,35 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.example.demo.login.domain.model.valid.Required;
+import com.example.demo.login.domain.model.valid.ValidPattern;
+import com.example.demo.login.domain.model.valid.Value;
+
 import lombok.Data;
 
 @Data
 public class SignupForm {
 
-	@NotBlank
-	@Email
+	@NotBlank(groups=Required.class)
+	@Email(groups=Value.class)
 	private String userId;
 
-	@NotBlank
-	@Length(min=4, max=100)
-	@Pattern(regexp="[a-zA-Z0-9]+$")
+	@NotBlank(groups=Required.class)
+	@Length(min=4, max=100, groups=Value.class)
+	@Pattern(regexp="[a-zA-Z0-9]+$", groups=ValidPattern.class)
 	private String password;
 
-	@NotBlank
+	@NotBlank(groups=Required.class)
 	private String userName;
 
-	@NotNull
+	@NotNull(groups=Required.class)
 	@DateTimeFormat(pattern="yyyy/MM/dd")
 	private Date birthday;
 
-	@Range(min=20, max=200)
+	@Range(min=20, max=200, groups=Value.class)
 	private int age;
 
-	@AssertFalse
+	@AssertFalse(groups=Value.class)
 	private boolean marrige;
 
 }

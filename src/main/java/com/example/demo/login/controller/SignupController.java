@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.login.domain.model.SignupForm;
+import com.example.demo.login.domain.model.valid.GroupOrder;
 
 @Controller
 public class SignupController {
@@ -23,7 +24,7 @@ public class SignupController {
 	}
 
 	@PostMapping(routing)
-	public String postSignup(@ModelAttribute @Validated SignupForm form, BindingResult bindingResult, Model model) {
+	public String postSignup(@ModelAttribute @Validated(GroupOrder.class) SignupForm form, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			return getSignup(form, model);
 		}
