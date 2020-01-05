@@ -8,22 +8,22 @@
 
 <title>ログイン画面</title>
 </head>
-<body>
+<body class="text-center">
 
 	<div class="container">
-	    <h1>Login</h1>
-	    <form method="post" action="/login">
-			<label>ユーザID</label>
-			<input type="text" /><br />
+		<div class="col-sm-5">
+		    <h1>Login</h1>
+		    <form method="post" action="/login">
+	    		<label>ユーザーID</label>
+	    		<input type="text" /><br />
+	    		<label>パスワード</label>
+	    		<input type="password" /><br />
 
-			<label>パスワード</label>
-			<input type="password" /><br />
+				<button class="btn btn-primary" type="submit">ログイン</button>
+		    </form>
 
-			<button class="btn btn-primary" type="submit">ログイン</button>
-	    </form>
-
-		<a th:href="@{'/signup'}">ユーザ登録はこちら</a>
-
+			<a th:href="@{'/signup'}">ユーザ登録はこちら</a>
+		</div>
 	</div>
 
 </body>

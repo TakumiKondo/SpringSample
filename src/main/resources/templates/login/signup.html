@@ -1,10 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet"></link>
+<script th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+
+<title>サインアップ画面</title>
 </head>
 <body>
+
+	<div class="container">
+		<div class="col-sm-5">
+			<div class="page-header">
+				<h1>ユーザ登録</h1>
+			</div>
+
+		    <form method="post" th:action="@{/signup}" th:object="${signupForm}">
+		    	<table class="table table-bordered">
+		    		<tr>
+		    			<th class="table-active col-sm-3">ユーザID (Email)</th>
+		    			<td><input type="text" th:field="*{userId}" placeholder="email@address.com"></td>
+		    		</tr>
+		    		<tr>
+		    			<th class="table-active">パスワード</th>
+		    			<td><input type="password" th:field="*{password}"></td>
+		    		</tr>
+		    		<tr>
+		    			<th class="table-active">ユーザ名</th>
+		    			<td><input type="text" th:field="*{userName}"></td>
+		    		</tr>
+		    		<tr>
+		    			<th class="table-active">誕生日</th>
+		    			<td><input type="text" placeholder="yyyy/MM/dd" maxlength="10" th:field="*{birthday}"></td>
+		    		</tr>
+		    		<tr>
+		    			<th class="table-active">年齢</th>
+		    			<td><input type="number" th:field="*{age}"></td>
+		    		</tr>
+		    		<tr>
+		    			<th class="table-active">結婚</th>
+		    			<td>
+							<input id="unmarried" type="radio" name="marrige" value="false" th:field="*{marrige}"/><label for="unmarried">未婚</label>
+							<input id="married" type="radio" name="marrige" value="true" th:field="*{marrige}"/><label for="married">既婚</label>
+						</td>
+		    		</tr>
+		    	</table>
+
+
+
+		    	<!-- エラーメッセージ -->
+		    	<ul>
+		    		<li th:each="error : ${#fields.detailedErrors()}">
+						<span th:text="${error.message}">Error Message</span>
+		    		</li>
+		    	</ul>
+
+				<button class="btn btn-primary" type="submit">ユーザ登録</button>
+		    </form>
+
+		    <a th:href="@{'/login'}">ログイン画面に戻る</a>
+
+		</div>
+	</div>
 
 </body>
 </html>
