@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+	<meta charset="UTF-8">
+	<link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}" rel="stylesheet"></link>
+	<script th:src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
+	<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+
+	<link th:href="@{/css/home.css}" rel="stylesheet"></link>
+
+	<title>Home</title>
+</head>
+
+<body>
+	<!-- ヘッダーナビゲーション -->
+	<nav class="navbar navbar-dark bg-dark navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">SpringSample</a>
+			</div>
+			<form method="post" action="@{/logout}">
+				<button class="btn btn-link pull-right navbar-brand" type="submit">ログアウト</button>
+			</form>
+		</div>
+	</nav>
+
+	<!-- サイドバー -->
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-2 sidebar">
+				<ul class="nav nav-pills nav-stcked">
+					<li role="presentation"><a th:href="@{/userList}">ユーザ管理</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<!-- コンテンツ -->
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm-10 col-sm-offset-2 content">
+				<div th:include="__${contents}__"></div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>
