@@ -24,5 +24,20 @@ public class LogAspect {
 		}
 	}
 
+	@Around("execution(* *..*.*UserDao*.*(..))")
+	public Object userDaoLog(ProceedingJoinPoint joinPoint) throws Throwable{
+		System.out.println("Start *UserDao*：" + joinPoint.getSignature());
+
+		try {
+			Object result = joinPoint.proceed();
+			System.out.println("End *UserDao*：" + joinPoint.getSignature());
+			return result;
+		}catch(Exception e) {
+			System.out.println("Exception *UserDao*：" + joinPoint.getSignature());
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
 }
 
