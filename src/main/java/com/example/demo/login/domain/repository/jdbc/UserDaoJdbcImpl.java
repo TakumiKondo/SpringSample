@@ -114,7 +114,11 @@ public class UserDaoJdbcImpl implements UserDao {
 	}
 
 	@Override
-	public void delete(User user) throws DataAccessException {
+	public void delete(String userId) throws DataAccessException {
+		String sql = "DELETE "
+				+ " FROM users"
+				+ " WHERE id = ?";
+		jdbcTemplate.update(sql, userId);
 	}
 
 	@Override

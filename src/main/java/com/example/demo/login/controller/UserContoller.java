@@ -54,7 +54,6 @@ public class UserContoller {
 
 	@PostMapping(value="/userDetail", params="update")
 	public String postUserDetailUpdate(@ModelAttribute SignupForm signupForm, Model model) {
-		System.out.println("update called.");
 
 		User user = new User(
 				signupForm.getUserId()
@@ -66,6 +65,14 @@ public class UserContoller {
 				,""
 		);
 		userService.update(user);
+
+		return getUserList(model);
+	}
+
+	@PostMapping(value="/userDetail", params="delete")
+	public String postUserDetailDelete(@ModelAttribute SignupForm signupForm, Model model) {
+
+		userService.delete(signupForm.getUserId());
 
 		return getUserList(model);
 	}

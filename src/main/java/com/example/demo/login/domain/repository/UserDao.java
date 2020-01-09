@@ -11,6 +11,6 @@ public interface UserDao {
 	public User selectOne(String userId) throws DataAccessException;
 	public UserList selectMany() throws DataAccessException;
 	public void update(User user) throws DataAccessException;
-	public void delete(User user) throws DataAccessException;
+	public void delete(String userId) throws DataAccessException;
 	public void createCsv() throws DataAccessException;
 }
