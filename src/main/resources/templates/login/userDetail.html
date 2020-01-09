@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+<meta charset="UTF-8">
+</head>
+
+<body>
+	<div th:fragment="userDetail_contents">
+		<div class="page-header">
+			<h1>ユーザー詳細</h1>
+		</div>
+
+		<div class="table-responsive-sm">
+			<form method="post" th:action="@{'/userDetail'}" th:object="${signupForm}">
+				<table class="table table-bordered table-hover">
+					<thead>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="col" class="bg-light">ユーザID</th>
+							<td><input type="text" th:field="*{userId}" readonly="readonly"></td>
+						</tr>
+						<tr>
+							<th class="bg-light">パスワード</th>
+							<td><input type="password" th:field="*{password}"></td>
+						</tr>
+						<tr>
+							<th class="bg-light">ユーザ名</th>
+							<td><input type="text" th:field="*{userName}"></td>
+						</tr>
+						<tr>
+							<th class="bg-light">誕生日</th>
+							<td><input type="text" th:field="*{birthday}" maxlength="10"></td>
+						</tr>
+						<tr>
+							<th class="bg-light">年齢</th>
+							<td><input type="number" th:field="*{age}"></td>
+						</tr>
+						<tr>
+							<th class="bg-light">結婚</th>
+							<td>
+							<input id="unmarried" type="radio" name="marrige" value="false" th:field="*{marrige}"><label for="unmarried">未婚</label><br>
+							<input id="married" type="radio" name="marrige" value="true" th:field="*{marrige}"><label for="married">既婚</label>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<button class="btn btn-danger">削除</button>
+				<button class="btn btn-primary float-right" name="update">更新</button>
+			</form>
+
+		</div>
+		<br>
+	</div>
+</body>
+</html>
