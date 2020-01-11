@@ -38,7 +38,6 @@ public class UserRowCallbackHandler implements RowCallbackHandler {
         } catch(IOException e) {
             e.printStackTrace();
             throw new SQLException(e);
-
         }
     }
 

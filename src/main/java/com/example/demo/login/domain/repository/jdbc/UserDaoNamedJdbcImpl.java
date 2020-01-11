@@ -7,64 +7,96 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.login.domain.model.User;
 import com.example.demo.login.domain.repository.UserDao;
 
-@Repository("UserDaoJdbcImpl")
+@Repository("UserDaoNamedJdbcImpl")
 public class UserDaoNamedJdbcImpl implements UserDao {
 
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    NamedParameterJdbcTemplate paramJdbcTemplate;
 
     @Override
     public int count() throws DataAccessException {
         String sql = "SELECT COUNT(*) FROM users";
-        int count = jdbcTemplate.queryForObject(sql, Integer.class);
+        SqlParameterSource pramSource = new MapSqlParameterSource();
+        int count = paramJdbcTemplate.queryForObject(sql, pramSource, Integer.class);
 
         return count;
     }
 
     @Override
     public void register(User user) throws DataAccessException {
-        String sql = "INSERT INTO users(" + "id" + ",password" + ",name" + ",birthday" + ",age" + ",marrige" + ",role)"
-                + " VALUES(?, ?, ?, ?, ?, ?, ?)";
+        String sql = ""
+            + "INSERT INTO users("
+                + "id"
+                + ",password"
+                + ",name"
+                + ",birthday"
+                + ",age"
+                + ",marrige"
+                + ",role)"
+            + " VALUES("
+                + ":id"
+                + ",:password"
+                + ",:name"
+                + ",:birthday"
+                + ",:age"
+                + ",:marrige"
+                + ",:role)";
 
-        jdbcTemplate.update(sql, user.id(), user.password(), user.name(), user.birthday(), user.age(), user.marrige(),
-                user.role());
+        SqlParameterSource paramMap = new MapSqlParameterSource()
+            .addValue("id", user.id())
+            .addValue("password", user.password())
+            .addValue("name", user.name())
+            .addValue("birthday", user.birthday())
+            .addValue("age", user.age())
+            .addValue("marrige", user.marrige())
+            .addValue("role", user.role());
 
-        System.out.println("登録成功");
+        paramJdbcTemplate.update(sql, paramMap);
     }
 
     @Override
-    public User selectOne(String id) throws DataAccessException {
-        String sql = "SELECT *" + " FROM" + " users" + " WHERE" + " id = ?";
-        Map<String, Object> oneUser = jdbcTemplate.queryForMap(sql, id);
-
-        User user = new User((String) oneUser.get("id"), (String) oneUser.get("password"), (String) oneUser.get("name"),
-                (Date) oneUser.get("birthday"), ((Integer) oneUser.get("age")).intValue(),
-                (Boolean) oneUser.get("marrige"), (String) oneUser.get("role"));
+    public User selectOne(String userId) throws DataAccessException {
+        String sql = "SELECT * FROM users WHERE id = :id";
+        SqlParameterSource paramMap = new MapSqlParameterSource()
+                .addValue("id", userId);
+        Map<String, Object> userMap = paramJdbcTemplate.queryForMap(sql, paramMap);
+        User user = new User(
+                (String) userMap.get("id")
+                ,(String) userMap.get("password")
+                ,(String) userMap.get("name")
+                ,(Date) userMap.get("birthday")
+                ,((Integer) userMap.get("age")).intValue()
+                ,(Boolean) userMap.get("marrige")
+                ,(String) userMap.get("role")
+         );
 
         return user;
     }
 
     @Override
     public List<User> selectMany() throws DataAccessException {
-        String sql = "SELECT " + "id" + ",name" + ",birthday" + ",age" + ",marrige" + ",role" + " FROM users";
+        String sql = "SELECT * FROM users";
+        SqlParameterSource paramMap = new MapSqlParameterSource();
+        List<Map<String, Object>> userMaps = paramJdbcTemplate.queryForList(sql, paramMap);
 
-        List<Map<String, Object>> users = jdbcTemplate.queryForList(sql);
-        List<User> userList = new ArrayList<User>();
-        for(Map<String, Object> eachUser: users) {
+        List<User> userList = new ArrayList<>();
+        for (Map<String, Object> userMap : userMaps) {
             User user = new User(
-                    (String) eachUser.get("id")
-                    ,(String) eachUser.get("password")
-                    ,(String) eachUser.get("name")
-                    ,(Date) eachUser.get("birthday")
-                    ,((Integer) eachUser.get("age")).intValue()
-                    ,(Boolean) eachUser.get("marrige")
-                    ,(String) eachUser.get("role")
+                    (String) userMap.get("id")
+                    ,(String) userMap.get("password")
+                    ,(String) userMap.get("name")
+                    ,(Date) userMap.get("birthday")
+                    ,((Integer) userMap.get("age")).intValue()
+                    ,(Boolean) userMap.get("marrige")
+                    ,(String) userMap.get("role")
              );
             userList.add(user);
         }
@@ -74,23 +106,79 @@ public class UserDaoNamedJdbcImpl implements UserDao {
 
     @Override
     public void update(User user) throws DataAccessException {
-        String sql = "UPDATE" + " users" + " SET" + " password = ?" + ",name = ?" + ",birthday = ?" + ",age = ?"
-                + ",marrige = ?" + " WHERE" + " id = ?;";
+        String sql = ""
+            + "UPDATE"
+                + " users"
+            + " SET"
+                + " password = :password"
+                + ",name = :name"
+                + ",birthday = :birthday"
+                + ",age = :age"
+                + ",marrige = :marrige"
+            + " WHERE"
+                + " id = :id;";
 
-        jdbcTemplate.update(sql, user.password(), user.name(), user.birthday(), user.age(), user.marrige(), user.id());
+        SqlParameterSource paramMap = new MapSqlParameterSource()
+              .addValue("password", user.password())
+              .addValue("name", user.name())
+              .addValue("birthday", user.birthday())
+              .addValue("age", user.age())
+              .addValue("marrige", user.marrige())
+              .addValue("id", user.id());
+
+        paramJdbcTemplate.update(sql, paramMap);
     }
 
     @Override
     public void delete(String userId) throws DataAccessException {
-        String sql = "DELETE " + " FROM users" + " WHERE id = ?";
-        jdbcTemplate.update(sql, userId);
+        String sql = ""
+            + "DELETE"
+            + " FROM"
+                + " users"
+            + " WHERE"
+                + " id = :id;";
+
+        SqlParameterSource paramMap = new MapSqlParameterSource()
+            .addValue("id", userId);
+
+        paramJdbcTemplate.update(sql, paramMap);
     }
 
     @Override
     public void createCsv() throws DataAccessException {
-        String sql = "SELECT * FROM users";
+        // TODO 自動生成されたメソッド・スタブ
+        String sql = ""
+            + "SELECT"
+                + " *"
+            + " FROM"
+                + " users";
+
         UserRowCallbackHandler userRowCallbackHandler = new UserRowCallbackHandler();
-        jdbcTemplate.query(sql, userRowCallbackHandler);
+
+        paramJdbcTemplate.query(sql, userRowCallbackHandler);
     }
+
+
+//
+//    @Override
+//    public void update(User user) throws DataAccessException {
+//        String sql = "UPDATE" + " users" + " SET" + " password = ?" + ",name = ?" + ",birthday = ?" + ",age = ?"
+//                + ",marrige = ?" + " WHERE" + " id = ?;";
+//
+//        jdbcTemplate.update(sql, user.password(), user.name(), user.birthday(), user.age(), user.marrige(), user.id());
+//    }
+//
+//    @Override
+//    public void delete(String userId) throws DataAccessException {
+//        String sql = "DELETE " + " FROM users" + " WHERE id = ?";
+//        jdbcTemplate.update(sql, userId);
+//    }
+//
+//    @Override
+//    public void createCsv() throws DataAccessException {
+//        String sql = "SELECT * FROM users";
+//        UserRowCallbackHandler userRowCallbackHandler = new UserRowCallbackHandler();
+//        jdbcTemplate.query(sql, userRowCallbackHandler);
+//    }
 
 }
