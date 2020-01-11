@@ -1,5 +1,7 @@
 package com.example.demo.login.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.demo.login.domain.model.SignupForm;
 import com.example.demo.login.domain.model.User;
-import com.example.demo.login.domain.model.UserList;
 import com.example.demo.login.domain.service.UserService;
 
 @Controller
@@ -22,7 +23,7 @@ public class UserContoller {
 	public String getUserList(Model model) {
 		model.addAttribute("contents", "login/userList::userList_contents");
 
-		UserList userList = userService.selectMany();
+		List<User> userList = userService.selectMany();
 		model.addAttribute("userList", userList);
 
 		int count = userService.count();

@@ -24,7 +24,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="user:${userList.list()}">
+					<tr th:each="user:${userList}">
 						<td scope="row" th:text="${user.id()}"></td>
 						<td th:text="${user.name()}"></td>
 						<td th:text="${#dates.format(user.birthday(), 'YYYY年 M月 D日')}"></td>
