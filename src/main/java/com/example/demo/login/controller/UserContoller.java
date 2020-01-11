@@ -1,8 +1,12 @@
 package com.example.demo.login.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -77,4 +81,24 @@ public class UserContoller {
 
 		return getUserList(model);
 	}
+
+	@GetMapping("/userList/csv")
+	public ResponseEntity<byte[]> getUserListCsv(){
+
+	    userService.createCsv();
+	    byte[] bytes = null;
+
+	    try {
+	        bytes = userService.getFile("file.csv");
+	    } catch(IOException e) {
+	        e.printStackTrace();
+	    }
+
+	    HttpHeaders httpHeaders = new HttpHeaders();
+	    httpHeaders.add("Content-Type", "text/csv; charset=UTF-8");
+	    httpHeaders.setContentDispositionFormData("filename", "file.csv");
+
+	    return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
+	}
+
 }

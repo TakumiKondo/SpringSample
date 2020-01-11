@@ -40,7 +40,7 @@
 			<label th:text="'合計：' + ${count} + '件'"></label>
 		</div>
 		<br>
-		<a class="btn btn-primary" href="#">CSV出力</a>
+		<a class="btn btn-primary" th:href="@{'/userList/csv'}">CSV出力</a>
 	</div>
 </body>
 </html>
