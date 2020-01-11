@@ -1,9 +1,15 @@
 package com.example.demo.login.domain.service;
 
+import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.login.domain.model.User;
@@ -13,7 +19,7 @@ import com.example.demo.login.domain.repository.UserDao;
 public class UserService {
 
     @Autowired
-    @Qualifier("UserDaoJdbcImpl3")
+    @Qualifier("UserDaoJdbcImpl4")
     UserDao userDao;
 
     public void register(User user) {
@@ -38,5 +44,18 @@ public class UserService {
 
     public void delete(String userId) {
         userDao.delete(userId);
+    }
+
+    public void createCsv() throws DataAccessException {
+        userDao.createCsv();
+    }
+
+    public byte[] getFile(String fileName) throws IOException {
+
+        FileSystem fileSystem = FileSystems.getDefault();
+        Path path = fileSystem.getPath(fileName);
+        byte[] bytes = Files.readAllBytes(path);
+
+        return bytes;
     }
 }
