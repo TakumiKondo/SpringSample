@@ -2,6 +2,9 @@ package com.example.demo.login.domain.model;
 
 import java.util.Date;
 
+import lombok.Data;
+
+@Data
 public class User {
 	private String id;
 	private String password;
@@ -10,6 +13,9 @@ public class User {
 	private int age;
 	private boolean marrige;
 	private String role;
+
+	public User() {
+	}
 
 	public User(String id, String password, String name, Date birthday, int age, boolean marrige, String role){
 		this.id = id;

@@ -1,5 +1,7 @@
 package com.example.demo.login.domain.repository.jdbc;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -17,27 +19,27 @@ public class UserDaoJdbcImpl3 extends UserDaoJdbcImpl {
 
     @Override
     public User selectOne(String id) throws DataAccessException {
-        String sql = "SELECT *" + " FROM" + " users" + " WHERE" + " id = ?";
-//        UserRowMapper rowMapper = new UserRowMapper();
-//        User user = jdbcTemplate.queryForObject(sql, rowMapper, id);
-
+        String sql = "SELECT * FROM users WHERE id = ?";
         RowMapper<User> userRowMapper = new BeanPropertyRowMapper<User>(User.class);
         User user = jdbcTemplate.queryForObject(sql, userRowMapper, id);
 
         return user;
     }
 
-//    @Override
-//    public UserList selectMany() throws DataAccessException {
-//        String sql = "SELECT " + "id" + ",name" + ",birthday" + ",age" + ",marrige" + ",role" + " FROM users";
-//
-////        List<Map<String, Object>> users = jdbcTemplate.queryForList(sql);
-////        UserList userList = new UserList(users);
-//
-//        RowMapper<User> rowMapper = new BeanPropertyRowMapper<User>(User.class);
-//        List<User> userList = jdbcTemplate.query(sql, rowMapper);
-//
-//        return userList;
-//    }
+    @Override
+    public List<User> selectMany() throws DataAccessException {
+        String sql = "SELECT"
+                + " id"
+                + ",name"
+                + ",birthday"
+                + ",age"
+                + ",marrige"
+                + ",role"
+                + " FROM users";
+        RowMapper<User> rowMapper = new BeanPropertyRowMapper<User>(User.class);
+        List<User> userList = jdbcTemplate.query(sql, rowMapper);
+
+        return userList;
+    }
 
 }
