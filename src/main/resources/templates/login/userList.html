@@ -7,40 +7,41 @@
 </head>
 
 <body>
-	<div th:fragment="userList_contents">
-		<div class="page-header">
-			<h1>ユーザ一覧</h1>
-		</div>
-		<div class="table-responsive-sm">
-			<table class="table table-bordered table-hover table-striped">
-				<thead>
-					<tr class="">
-						<th scope="col" class="bg-light">ユーザID</th>
-						<th class="bg-light">ユーザ名</th>
-						<th class="bg-light">誕生日</th>
-						<th class="bg-light">年齢</th>
-						<th class="bg-light">結婚</th>
-						<th class="bg-light"></th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr th:each="user:${userList}">
-						<td scope="row" th:text="${user.id()}"></td>
-						<td th:text="${user.name()}"></td>
-						<td th:text="${#dates.format(user.birthday(), 'YYYY年 M月 D日')}"></td>
-						<td th:text="${user.age()}"></td>
-						<td th:text="${user.marrige()} ? '既婚' : '未婚'"></td>
-						<td>
-							<a class="btn btn-info" th:href="@{'/userDetail/' + ${user.id()}}">詳細</a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+  <div th:fragment="userList_contents">
+    <div class="page-header">
+      <h1>ユーザ一覧</h1>
+    </div>
+    <div class="table-responsive-sm">
+      <table class="table table-bordered table-hover table-striped">
+        <thead>
+          <tr class="">
+            <th scope="col" class="bg-light">ユーザID</th>
+            <th class="bg-light">ユーザ名</th>
+            <th class="bg-light">誕生日</th>
+            <th class="bg-light">年齢</th>
+            <th class="bg-light">結婚</th>
+            <th class="bg-light"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="user:${userList}">
+            <td scope="row" th:text="${user.id()}"></td>
+            <td th:text="${user.name()}"></td>
+            <td th:text="${#dates.format(user.birthday(), 'YYYY年 M月 D日')}"></td>
+            <td th:text="${user.age()}"></td>
+            <td th:text="${user.marrige()} ? '既婚' : '未婚'"></td>
+            <td>
+              <a class="btn btn-info" th:href="@{'/userDetail/' + ${user.id()}}">詳細</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-			<label th:text="'合計：' + ${count} + '件'"></label>
-		</div>
-		<br>
-		<a class="btn btn-primary" th:href="@{'/userList/csv'}">CSV出力</a>
-	</div>
+      <label th:text="'合計：' + ${count} + '件'"></label>
+      <p th:text="${exception}"></p>
+    </div>
+    <br>
+    <a class="btn btn-primary" th:href="@{'/userList/csv'}">CSV出力</a>
+  </div>
 </body>
 </html>

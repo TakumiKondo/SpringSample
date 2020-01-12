@@ -30,10 +30,10 @@ public class UserDaoJdbcImpl implements UserDao {
     @Override
     public void register(User user) throws DataAccessException {
         String sql = ""
-        	+ "INSERT INTO users("
-        		+ "id"
-        		+ ",password"
-        		+ ",name" + ",birthday" + ",age" + ",marrige" + ",role)"
+            + "INSERT INTO users("
+                + "id"
+                + ",password"
+                + ",name" + ",birthday" + ",age" + ",marrige" + ",role)"
                 + " VALUES(?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql, user.id(), user.password(), user.name(), user.birthday(), user.age(), user.marrige(),
@@ -81,7 +81,12 @@ public class UserDaoJdbcImpl implements UserDao {
         String sql = "UPDATE" + " users" + " SET" + " password = ?" + ",name = ?" + ",birthday = ?" + ",age = ?"
                 + ",marrige = ?" + " WHERE" + " id = ?;";
 
-        jdbcTemplate.update(sql, user.password(), user.name(), user.birthday(), user.age(), user.marrige(), user.id());
+        int resultNum = jdbcTemplate.update(sql, user.password(), user.name(), user.birthday(), user.age(), user.marrige(), user.id());
+        if (resultNum == 0) {
+            throw new DataAccessException("更新処理に失敗しました。") {
+            };
+        }
+
     }
 
     @Override

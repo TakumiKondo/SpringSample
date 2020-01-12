@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,85 +21,92 @@ import com.example.demo.login.domain.service.UserService;
 
 @Controller
 public class UserContoller {
-	@Autowired
-	UserService userService;
+    @Autowired
+    UserService userService;
 
-	@GetMapping("/userList")
-	public String getUserList(Model model) {
-		model.addAttribute("contents", "login/userList::userList_contents");
+    @GetMapping("/userList")
+    public String getUserList(Model model) {
+        model.addAttribute("contents", "login/userList::userList_contents");
 
-		List<User> userList = userService.selectMany();
-		model.addAttribute("userList", userList);
+        List<User> userList = userService.selectMany();
+        model.addAttribute("userList", userList);
 
-		int count = userService.count();
-		model.addAttribute("count", count);
+        int count = userService.count();
+        model.addAttribute("count", count);
 
-		return "login/homeLayout";
-	}
+        return "login/homeLayout";
+    }
 
-	@GetMapping("/userDetail/{id:.+}")
-	public String getUserDetail(
-			@ModelAttribute SignupForm signupForm
-			,Model model
-			,@PathVariable("id") String id) {
+    @GetMapping("/userDetail/{id:.+}")
+    public String getUserDetail(
+            @ModelAttribute SignupForm signupForm
+            ,Model model
+            ,@PathVariable("id") String id) {
 
-		System.out.println("id = " + id);
+        System.out.println("id = " + id);
 
-		model.addAttribute("contents", "login/userDetail::userDetail_contents");
+        model.addAttribute("contents", "login/userDetail::userDetail_contents");
 
-		User user = userService.selectOne(id);
-		signupForm.setUserId(user.id());
-		signupForm.setUserName(user.name());
-		signupForm.setBirthday(user.birthday());
-		signupForm.setAge(user.age());
-		signupForm.setMarrige(user.marrige());
-		model.addAttribute("signupForm", signupForm);
+        User user = userService.selectOne(id);
+        signupForm.setUserId(user.id());
+        signupForm.setUserName(user.name());
+        signupForm.setBirthday(user.birthday());
+        signupForm.setAge(user.age());
+        signupForm.setMarrige(user.marrige());
+        model.addAttribute("signupForm", signupForm);
 
-		return "login/homeLayout";
-	}
+        return "login/homeLayout";
+    }
 
-	@PostMapping(value="/userDetail", params="update")
-	public String postUserDetailUpdate(@ModelAttribute SignupForm signupForm, Model model) {
+    @PostMapping(value="/userDetail", params="update")
+    public String postUserDetailUpdate(@ModelAttribute SignupForm signupForm, Model model) {
 
-		User user = new User(
-				signupForm.getUserId()
-				,signupForm.getPassword()
-				,signupForm.getUserName()
-				,signupForm.getBirthday()
-				,signupForm.getAge()
-				,signupForm.isMarrige()
-				,""
-		);
-		userService.update(user);
+        User user = new User(
+                signupForm.getUserId()
+                ,signupForm.getPassword()
+                ,signupForm.getUserName()
+                ,signupForm.getBirthday()
+                ,signupForm.getAge()
+                ,signupForm.isMarrige()
+                ,""
+        );
+        try {
+            userService.update(user);
+        } catch(DataAccessException e) {
+            model.addAttribute("exception", "更新処理失敗");
+        };
 
-		return getUserList(model);
-	}
 
-	@PostMapping(value="/userDetail", params="delete")
-	public String postUserDetailDelete(@ModelAttribute SignupForm signupForm, Model model) {
 
-		userService.delete(signupForm.getUserId());
 
-		return getUserList(model);
-	}
+        return getUserList(model);
+    }
 
-	@GetMapping("/userList/csv")
-	public ResponseEntity<byte[]> getUserListCsv(){
+    @PostMapping(value="/userDetail", params="delete")
+    public String postUserDetailDelete(@ModelAttribute SignupForm signupForm, Model model) {
 
-	    userService.createCsv();
-	    byte[] bytes = null;
+        userService.delete(signupForm.getUserId());
 
-	    try {
-	        bytes = userService.getFile("file.csv");
-	    } catch(IOException e) {
-	        e.printStackTrace();
-	    }
+        return getUserList(model);
+    }
 
-	    HttpHeaders httpHeaders = new HttpHeaders();
-	    httpHeaders.add("Content-Type", "text/csv; charset=UTF-8");
-	    httpHeaders.setContentDispositionFormData("filename", "file.csv");
+    @GetMapping("/userList/csv")
+    public ResponseEntity<byte[]> getUserListCsv(){
 
-	    return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
-	}
+        userService.createCsv();
+        byte[] bytes = null;
+
+        try {
+            bytes = userService.getFile("file.csv");
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("Content-Type", "text/csv; charset=UTF-8");
+        httpHeaders.setContentDispositionFormData("filename", "file.csv");
+
+        return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
+    }
 
 }
