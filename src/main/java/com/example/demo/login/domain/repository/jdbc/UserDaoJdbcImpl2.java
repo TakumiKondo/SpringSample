@@ -10,21 +10,21 @@ import com.example.demo.login.domain.model.User;
 @Repository("UserDaoJdbcImpl2")
 public class UserDaoJdbcImpl2 extends UserDaoJdbcImpl {
 
-	@Autowired
-	JdbcTemplate jdbcTemplate;
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
-	@Override
-	public User selectOne(String id) throws DataAccessException {
-		String sql = "SELECT *"
-				+ " FROM"
-				+ " users"
-				+ " WHERE"
-				+ " id = ?";
-		UserRowMapper rowMapper = new UserRowMapper();
-		User user = jdbcTemplate.queryForObject(sql, rowMapper, id);
+    @Override
+    public User selectOne(String id) throws DataAccessException {
+        String sql = "SELECT *"
+                + " FROM"
+                + " users"
+                + " WHERE"
+                + " id = ?";
+        UserRowMapper rowMapper = new UserRowMapper();
+        User user = jdbcTemplate.queryForObject(sql, rowMapper, id);
 
-		return user;
-	}
+        return user;
+    }
 
 //	@Override
 //	public UserList selectMany() throws DataAccessException {

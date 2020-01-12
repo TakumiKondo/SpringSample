@@ -29,7 +29,11 @@ public class UserDaoJdbcImpl implements UserDao {
 
     @Override
     public void register(User user) throws DataAccessException {
-        String sql = "INSERT INTO users(" + "id" + ",password" + ",name" + ",birthday" + ",age" + ",marrige" + ",role)"
+        String sql = ""
+        	+ "INSERT INTO users("
+        		+ "id"
+        		+ ",password"
+        		+ ",name" + ",birthday" + ",age" + ",marrige" + ",role)"
                 + " VALUES(?, ?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql, user.id(), user.password(), user.name(), user.birthday(), user.age(), user.marrige(),
