@@ -6,7 +6,7 @@ INSERT INTO employee(id, name, age) VALUES (1, '派遣 野郎', 30)
 ;
 
 INSERT INTO users(id, password, name, birthday, age, marrige, role) VALUES
-('1','password','Name1', '2000-01-01', 18, true, 'ROLE_ADMIN')
+('test@text.com','password','Name1', '2000-01-01', 18, true, 'ROLE_ADMIN')
 ,('2','password','Name2', '2000-01-02', 20, true, 'ROLE_ADMIN')
 ,('3','password','Name3', '2000-01-03', 30, true, 'ROLE_ADMIN')
 ,('4','password','Name4', '2000-01-04', 40, false, 'ROLE_ADMIN')
