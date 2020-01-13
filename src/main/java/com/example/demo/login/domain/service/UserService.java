@@ -21,7 +21,7 @@ import com.example.demo.login.domain.repository.UserDao;
 public class UserService {
 
     @Autowired
-    @Qualifier("UserDaoJdbcImpl")
+    @Qualifier("UserDaoJdbcImpl2")
     UserDao userDao;
 
     public void register(User user) {

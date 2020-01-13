@@ -19,23 +19,34 @@ public class UserDaoJdbcImpl3 extends UserDaoJdbcImpl {
 
     @Override
     public User selectOne(String id) throws DataAccessException {
-        String sql = "SELECT * FROM users WHERE id = ?";
-        RowMapper<User> userRowMapper = new BeanPropertyRowMapper<User>(User.class);
-        User user = jdbcTemplate.queryForObject(sql, userRowMapper, id);
+        // SQL文を作成
+        String sql = ""
+            + "SELECT"
+                + " *"
+            + " FROM"
+                + " users"
+            + " WHERE"
+                + " id = ?";
+
+        // queryForObjectメソッドを実行
+        // SQLの実行結果は、自動的にUserクラスにマッピングされて取得できる。
+        RowMapper<User> rowMapper = new BeanPropertyRowMapper<User>(User.class);
+        User user = jdbcTemplate.queryForObject(sql, rowMapper, id);
 
         return user;
     }
 
     @Override
     public List<User> selectMany() throws DataAccessException {
-        String sql = "SELECT"
-                + " id"
-                + ",name"
-                + ",birthday"
-                + ",age"
-                + ",marrige"
-                + ",role"
-                + " FROM users";
+        // SQL文を作成
+        String sql = ""
+            + "SELECT"
+                + " *"
+            + " FROM"
+                + " users";
+
+        // queryメソッドを実行
+        // SQLの実行結果は、自動的にUserクラスにマッピングされて、Listで取得できる。
         RowMapper<User> rowMapper = new BeanPropertyRowMapper<User>(User.class);
         List<User> userList = jdbcTemplate.query(sql, rowMapper);
 

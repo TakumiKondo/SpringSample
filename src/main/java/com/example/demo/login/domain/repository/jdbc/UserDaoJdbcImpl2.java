@@ -1,5 +1,7 @@
 package com.example.demo.login.domain.repository.jdbc;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,32 +17,38 @@ public class UserDaoJdbcImpl2 extends UserDaoJdbcImpl {
 
     @Override
     public User selectOne(String id) throws DataAccessException {
-        String sql = "SELECT *"
-                + " FROM"
-                + " users"
-                + " WHERE"
+        // SQL文を作成
+        String sql = ""
+            + "SELECT"
+                + " *"
+            + " FROM"
+               + " users"
+            + " WHERE"
                 + " id = ?";
+
+        // queryForObjectメソッドでSQLを実行し、
+        // UserRowMapperのマッピング結果である、Userオブジェクトを受け取る。
         UserRowMapper rowMapper = new UserRowMapper();
         User user = jdbcTemplate.queryForObject(sql, rowMapper, id);
 
         return user;
     }
 
-//	@Override
-//	public UserList selectMany() throws DataAccessException {
-//		String sql = "SELECT "
-//				+ "id"
-//				+ ",name"
-//				+ ",birthday"
-//				+ ",age"
-//				+ ",marrige"
-//				+ ",role"
-//				+ " FROM users";
-//
-//		List<Map<String, Object>> users = jdbcTemplate.queryForList(sql);
-//		UserList userList = new UserList(users);
-//
-//		return userList;
-//	}
+    @Override
+    public List<User> selectMany() throws DataAccessException {
+        // SQL文を作成
+        String sql = ""
+            + "SELECT"
+                + " *"
+            + " FROM"
+                + " users";
+
+        // queryメソッドでSQLを実行
+        // UserRowMapperのマッピング結果である、UserオブジェクトのListを受け取る。
+        UserRowMapper rowMapper = new UserRowMapper();
+        List<User> userList = jdbcTemplate.query(sql, rowMapper);
+
+        return userList;
+    }
 
 }

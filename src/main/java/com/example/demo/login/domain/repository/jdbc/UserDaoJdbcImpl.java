@@ -44,22 +44,49 @@ public class UserDaoJdbcImpl implements UserDao {
 
     @Override
     public User selectOne(String id) throws DataAccessException {
-        String sql = "SELECT *" + " FROM" + " users" + " WHERE" + " id = ?";
+        // SQL文を作成
+        String sql = ""
+            + "SELECT"
+                + " *"
+            + " FROM"
+                + " users"
+            + " WHERE"
+                + " id = ?";
+
+        // queryForMapメソッドでSQLを実行し、結果MapのListで受け取る。
+        // SQL文の ? の部分に当てはめる値を一緒に与える。
         Map<String, Object> oneUser = jdbcTemplate.queryForMap(sql, id);
 
-        User user = new User((String) oneUser.get("id"), (String) oneUser.get("password"), (String) oneUser.get("name"),
-                (Date) oneUser.get("birthday"), ((Integer) oneUser.get("age")).intValue(),
-                (Boolean) oneUser.get("marrige"), (String) oneUser.get("role"));
+        // Userオブジェクトに格納する。
+        User user = new User(
+                (String) oneUser.get("id")
+                ,(String) oneUser.get("password")
+                ,(String) oneUser.get("name")
+                ,(Date) oneUser.get("birthday")
+                ,((Integer) oneUser.get("age")).intValue()
+                ,(Boolean) oneUser.get("marrige")
+                ,(String) oneUser.get("role")
+         );
 
         return user;
     }
 
     @Override
     public List<User> selectMany() throws DataAccessException {
-        String sql = "SELECT " + "id" + ",name" + ",birthday" + ",age" + ",marrige" + ",role" + " FROM users";
+        // SQL文を作成
+        String sql = ""
+            + "SELECT"
+                + " *"
+            + " FROM"
+                + " users";
 
+     // queryForListメソッドでSQLを実行し、結果MapのListで受け取る。
         List<Map<String, Object>> users = jdbcTemplate.queryForList(sql);
+
+        // Userオブジェクト格納用のListを作成する。
         List<User> userList = new ArrayList<User>();
+
+        // 受け取ったMapのListをfor文で回し、各ユーザの値をUserオブジェクトに格納する。
         for(Map<String, Object> eachUser: users) {
             User user = new User(
                     (String) eachUser.get("id")
@@ -70,6 +97,7 @@ public class UserDaoJdbcImpl implements UserDao {
                     ,(Boolean) eachUser.get("marrige")
                     ,(String) eachUser.get("role")
              );
+            // UserオブジェクトをListに追加する。
             userList.add(user);
         }
 
