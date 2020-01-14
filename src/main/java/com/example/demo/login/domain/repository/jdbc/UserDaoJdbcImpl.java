@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.login.domain.model.User;
@@ -18,6 +19,9 @@ public class UserDaoJdbcImpl implements UserDao {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public int count() throws DataAccessException {
@@ -36,7 +40,7 @@ public class UserDaoJdbcImpl implements UserDao {
                 + ",name" + ",birthday" + ",age" + ",marrige" + ",role)"
                 + " VALUES(?, ?, ?, ?, ?, ?, ?)";
 
-        jdbcTemplate.update(sql, user.id(), user.password(), user.name(), user.birthday(), user.age(), user.marrige(),
+        jdbcTemplate.update(sql, user.id(), cryptPassword(user.password()), user.name(), user.birthday(), user.age(), user.marrige(),
                 user.role());
 
         System.out.println("登録成功");
@@ -109,7 +113,7 @@ public class UserDaoJdbcImpl implements UserDao {
         String sql = "UPDATE" + " users" + " SET" + " password = ?" + ",name = ?" + ",birthday = ?" + ",age = ?"
                 + ",marrige = ?" + " WHERE" + " id = ?;";
 
-        int resultNum = jdbcTemplate.update(sql, user.password(), user.name(), user.birthday(), user.age(), user.marrige(), user.id());
+        int resultNum = jdbcTemplate.update(sql, cryptPassword(user.password()), user.name(), user.birthday(), user.age(), user.marrige(), user.id());
         if (resultNum == 0) {
             throw new DataAccessException("更新処理に失敗しました。") {
             };
@@ -128,6 +132,10 @@ public class UserDaoJdbcImpl implements UserDao {
         String sql = "SELECT * FROM users";
         UserRowCallbackHandler userRowCallbackHandler = new UserRowCallbackHandler();
         jdbcTemplate.query(sql, userRowCallbackHandler);
+    }
+
+    private String cryptPassword(String password) {
+        return passwordEncoder.encode(password);
     }
 
 }
