@@ -19,20 +19,15 @@ import com.example.demo.login.domain.service.UserService;
 
 @Controller
 public class SignupController {
-    final private String routing = "/signup";
-
     @Autowired
     private UserService userService;
 
-    @GetMapping(routing)
+    @GetMapping("/signup")
     public String getSignup(@ModelAttribute SignupForm form, Model model) {
-//		Marrige marrige = new Marrige();
-//		model.addAttribute("marrige", marrige);
-
         return "login/signup";
     }
 
-    @PostMapping(routing)
+    @PostMapping("/signup")
     public String postSignup(@ModelAttribute @Validated(GroupOrder.class) SignupForm form, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return getSignup(form, model);
