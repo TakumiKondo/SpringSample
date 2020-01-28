@@ -37,7 +37,6 @@ public class SignupController {
         if (bindingResult.hasErrors()) {
             return getSignup(form, model);
         }
-        System.out.println(form);	// debug
 
         User user = new User(
                 form.getUserId()
@@ -46,7 +45,7 @@ public class SignupController {
                 ,form.getBirthday()
                 ,form.getAge()
                 ,form.isMarrige()
-                ,"STAFF");
+                ,"ROLE_GENERAL");
         userService.register(user);
 
         return "redirect:/login";
